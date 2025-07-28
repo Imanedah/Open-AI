@@ -1,20 +1,16 @@
-import openai
+from dotenv import load_dotenv
+import os
+from openai import OpenAI
 
-def generate_summary(text, openai_api_key):
-    openai.api_key = openai_api_key
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    prompt = f"Voici un texte à résumer de façon claire, précise et bien structurée :\n\n{text}\n\nRésumé :"
-
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "Tu es un assistant qui génère des résumés professionnels et structurés."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.4,
-            max_tokens=700
-        )
-        return response['choices'][0]['message']['content'].strip()
-    except Exception as e:
-        return f"Erreur lors de l'appel à l'API : {str(e)}"
+def generate_summary(text):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "Tu es un expert en résumé."},
+            {"role": "user", "content": f"Fais un résumé clair et structuré du document suivant :\n{text}"}
+        ]
+    )
+    return response.choices[0].message.content

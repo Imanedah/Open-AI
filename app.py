@@ -5,20 +5,22 @@ from qa_engine import answer_question
 from summary import generate_summary
 from utils import convert_text_to_pdf, convert_text_to_csv
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
 st.set_page_config(page_title="Assistant IA PDF", layout="wide")
 
 st.title("📄 Assistant IA pour documents PDF")
-
-openai_api_key = st.text_input("🔑 Clé API OpenAI", type="password")
 
 uploaded_files = st.file_uploader("📤 Chargez un ou plusieurs fichiers PDF", type="pdf", accept_multiple_files=True)
 
 question = st.text_input("❓ Posez une question sur le contenu")
 
 if st.button("Poser la question"):
-    if not openai_api_key:
-        st.error("Veuillez entrer votre clé API OpenAI.")
-    elif not uploaded_files:
+    if not uploaded_files:
         st.error("Veuillez d'abord charger au moins un fichier PDF.")
     elif not question:
         st.error("Veuillez poser une question.")
@@ -36,9 +38,7 @@ if st.button("Poser la question"):
         st.write(response)
 
 if st.button("📑 Générer un résumé"):
-    if not openai_api_key:
-        st.error("Veuillez entrer votre clé API OpenAI.")
-    elif not uploaded_files:
+    if not uploaded_files:
         st.error("Veuillez d'abord charger au moins un fichier PDF.")
     else:
         all_text = ""
@@ -46,7 +46,7 @@ if st.button("📑 Générer un résumé"):
             all_text += extract_text_from_pdf(file)
 
         with st.spinner("📝 Résumé en cours..."):
-            summary = generate_summary(all_text, openai_api_key)
+            summary = generate_summary(all_text)
         st.success("✅ Résumé généré :")
         st.write(summary)
 

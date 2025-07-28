@@ -1,7 +1,8 @@
 streamlit
 openai
-langchain
 PyPDF2
 python-dotenv
 sentence-transformers
 faiss-cpu
+fpdf2
+pandas
