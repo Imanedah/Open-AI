@@ -18,4 +18,4 @@ cp .env.example .env
 streamlit run app.py
 
 
-🚧 Ce projet est en cours de construction. Dernière mise à jour : juillet 2025.
+🚧 Ce projet est en cours de construction.
